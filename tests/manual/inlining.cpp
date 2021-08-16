@@ -16,9 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "../benchutil.h"
+
 inline void __attribute__((always_inline)) asdf()
 {
-    new char[1234];
+    auto p = new char[1234];
+    escape(p);
 }
 
 inline void __attribute__((always_inline)) bar()
