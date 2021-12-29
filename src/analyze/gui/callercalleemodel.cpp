@@ -44,6 +44,8 @@ QVariant CallerCalleeModel::headerCell(int column, int role) const
             return i18n("Temporary (Self)");
         case SelfPeakColumn:
             return i18n("Peak (Self)");
+        case SelfObjectsColumn:
+            return i18n("Objects (Self)");
         case SelfLeakedColumn:
             return i18n("Leaked (Self)");
         case InclusiveAllocationsColumn:
@@ -74,6 +76,9 @@ QVariant CallerCalleeModel::headerCell(int column, int role) const
                         "allocations originating directly at "
                         "this location. "
                         "This takes deallocations into account.</qt>");
+        case SelfObjectsColumn:
+            return i18n("<qt>The maximum number of objects allocated from "
+                        "this location alive simultaneously.</qt>");
         case SelfLeakedColumn:
             return i18n("<qt>The bytes allocated directly at this location that have "
                         "not been deallocated.</qt>");
@@ -115,6 +120,8 @@ QVariant CallerCalleeModel::cell(int column, int role, const Symbol& symbol, con
             return QVariant::fromValue<quint64>(std::abs(entry.selfCost.temporary));
         case SelfPeakColumn:
             return QVariant::fromValue<quint64>(std::abs(entry.selfCost.peak));
+        case SelfObjectsColumn:
+            return QVariant::fromValue<quint64>(std::abs(entry.selfCost.objects));
         case SelfLeakedColumn:
             return QVariant::fromValue<quint64>(std::abs(entry.selfCost.leaked));
         case InclusiveAllocationsColumn:
@@ -143,6 +150,7 @@ QVariant CallerCalleeModel::cell(int column, int role, const Symbol& symbol, con
         case SelfLeakedColumn:
         case InclusiveLeakedColumn:
             return QVariant::fromValue<qint64>(totalCosts.leaked);
+        case SelfObjectsColumn:
         case LocationColumn:
         case NUM_COLUMNS:
             break;
@@ -157,6 +165,8 @@ QVariant CallerCalleeModel::cell(int column, int role, const Symbol& symbol, con
             return QVariant::fromValue<qint64>(entry.selfCost.temporary);
         case SelfPeakColumn:
             return Util::formatBytes(entry.selfCost.peak);
+        case SelfObjectsColumn:
+            return QVariant::fromValue<qint64>(entry.selfCost.objects);
         case SelfLeakedColumn:
             return Util::formatBytes(entry.selfCost.leaked);
         case InclusiveAllocationsColumn:

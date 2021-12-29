@@ -19,6 +19,8 @@ struct AllocationData
     int64_t leaked = 0;
     // largest amount of bytes allocated
     int64_t peak = 0;
+    // largest amount of objects instantiated
+    int64_t objects = 0;
 
     void clearCost()
     {
@@ -29,7 +31,7 @@ struct AllocationData
 inline bool operator==(const AllocationData& lhs, const AllocationData& rhs)
 {
     return lhs.allocations == rhs.allocations && lhs.temporary == rhs.temporary && lhs.leaked == rhs.leaked
-        && lhs.peak == rhs.peak;
+        && lhs.peak == rhs.peak && lhs.objects == rhs.objects;
 }
 
 inline bool operator!=(const AllocationData& lhs, const AllocationData& rhs)
@@ -41,8 +43,9 @@ inline AllocationData& operator+=(AllocationData& lhs, const AllocationData& rhs
 {
     lhs.allocations += rhs.allocations;
     lhs.temporary += rhs.temporary;
-    lhs.peak += rhs.peak;
     lhs.leaked += rhs.leaked;
+    lhs.peak += rhs.peak;
+    lhs.objects += rhs.objects;
     return lhs;
 }
 
@@ -50,8 +53,9 @@ inline AllocationData& operator-=(AllocationData& lhs, const AllocationData& rhs
 {
     lhs.allocations -= rhs.allocations;
     lhs.temporary -= rhs.temporary;
-    lhs.peak -= rhs.peak;
     lhs.leaked -= rhs.leaked;
+    lhs.peak -= rhs.peak;
+    lhs.objects -= rhs.objects;
     return lhs;
 }
 

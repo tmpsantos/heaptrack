@@ -345,6 +345,11 @@ bool AccumulatedTraceData::read(boost::iostreams::filtering_istream& in, const P
                 allocation.leaked += info.size;
                 ++allocation.allocations;
 
+                // tmpsantos: find why this can be false
+                if (allocation.allocations > allocation.deallocations) {
+                    allocation.objects = std::max(allocation.objects, allocation.allocations - allocation.deallocations);
+                }
+
                 handleAllocation(info, allocationIndex);
             }
 
@@ -390,6 +395,7 @@ bool AccumulatedTraceData::read(boost::iostreams::filtering_istream& in, const P
 
             const auto& info = allocationInfos[allocationInfoIndex.index];
             totalCost.leaked -= info.size;
+
             if (temporary) {
                 ++totalCost.temporary;
             }
@@ -397,6 +403,8 @@ bool AccumulatedTraceData::read(boost::iostreams::filtering_istream& in, const P
             if (pass != FirstPass) {
                 auto& allocation = allocations[info.allocationIndex.index];
                 allocation.leaked -= info.size;
+                ++allocation.deallocations;
+
                 if (temporary) {
                     ++allocation.temporary;
                 }

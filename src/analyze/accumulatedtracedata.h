@@ -66,6 +66,9 @@ struct Allocation : public AllocationData
 {
     // backtrace entry point
     TraceIndex traceIndex;
+    // number of deallocations, used for peak
+    // instantiated objects calculation
+    int64_t deallocations = 0;
 };
 
 /**
